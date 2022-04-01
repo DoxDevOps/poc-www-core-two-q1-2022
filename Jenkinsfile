@@ -94,7 +94,7 @@ echo "Your build number is: \\${REQUEST_ID} -> ${REQUEST_ID}"'''
           }
         }
 
-        stage('Core & ART') {
+        stage('Core, ART & OPD') {
           steps {
             echo 'Shipping & configuring Core & ART'
             sh '''#python3 core_shippingx.py
