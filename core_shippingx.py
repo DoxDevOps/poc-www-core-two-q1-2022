@@ -3,6 +3,7 @@ import json
 import platform
 import subprocess
 import os
+from fabric import Connection
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -27,10 +28,10 @@ def alert(url, params):
     r = requests.post(url, json=params, headers=headers)
     return r
 
-recipients = ["+265998006237", "+265991450316", "+265995246144", "+265998276712"] #, "+265884563025", "+265995971632", "+265999453942", "+265888027458", "+265997762646","+265999755473","+265992215557", "+265991351754","+265994666034","+265996963312", "+265998555333","+265996146325","+265992268777","+265993030442"]
+recipients = ["+265995246144", "+265991450316", "+265998006237", "+265998276712"]
 
 #* Get cluster details
-cluster = get_xi_data('http://10.44.0.52/sites/api/v1/get_single_cluster/34')
+cluster = get_xi_data('http://10.44.0.52/sites/api/v1/get_single_cluster/1')
 
 for site_id in cluster['site']:
     site = get_xi_data('http://10.44.0.52/sites/api/v1/get_single_site/' + str(site_id))
@@ -56,9 +57,26 @@ for site_id in cluster['site']:
             push_core = "rsync " + "-r $WORKSPACE/BHT-Core " + site['username'] + "@" + site['ip_address'] + ":/var/www/html"
             os.system(push_core)
 
+            # run setup script
+            run_core_script = "ssh " + site['username'] + "@" + site['ip_address'] + " 'cd /var/www/html/BHT-Core && ./core_setup.sh'"
+            os.system(run_core_script)
+
+            result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run('cd /var/www/html/BHT-Core && git describe', hide=True)
+            
+            msg = "{0.stdout}"
+            
+            version = msg.format(result).strip()
+            
+            core_version = "v5.0.8-beta"
+            
+            if core_version == version:
+                msgx = "Hi there,\n\nDeployment of Core to " + version + " for " + site['name'] + " completed succesfully.\n\nThanks!\nEGPAF HIS."
+            else:
+                msgx = "Hi there,\n\nSomething went wrong while checking out to the latest Core version. Current version is " + version + " for " + site['name'] + ".\n\nThanks!\nEGPAF HIS."
+            
             # send sms alert
             for recipient in recipients:
-                msg = "Hi there,\n\nDeployment of CORE to v5.0.5 for " + site['name'] + " completed succesfully.\n\nThanks!\nEGPAF HIS."
+                msg = "Hi there,\n\nDeployment of CORE to " + version + " for " + site['name'] + " completed succesfully.\n\nThanks!\nEGPAF HIS."
                 params = {
                     "api_key": os.getenv('API_KEY'),
                     "recipient": recipient,
@@ -75,7 +93,7 @@ for site_id in cluster['site']:
             # make sure we are sending the alert at the last pint attempt
             if count == 3:
                 for recipient in recipients:
-                    msg = "Hi there,\n\nDeployment of CORE to v5.0.5 for " + site['name'] + " failed to complete after several connection attempts.\n\nThanks!\nEGPAF HIS."
+                    msg = "Hi there,\n\nDeployment of CORE to " + version + " for " + site['name'] + " failed to complete after several connection attempts.\n\nThanks!\nEGPAF HIS."
                     params = {
                         "api_key": os.getenv('API_KEY'),
                         "recipient": recipient,
