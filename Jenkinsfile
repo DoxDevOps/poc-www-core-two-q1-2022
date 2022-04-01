@@ -49,18 +49,35 @@ echo "Your build number is: \\${REQUEST_ID} -> ${REQUEST_ID}"'''
       }
     }
 
-    stage('Fetching ART') {
-      steps {
-        echo 'Starting to fetch ART from GitHub'
-        echo 'Checking if BHT-Core-Apps-ART exists.'
-        sh '[ -d "$WORKSPACE/BHT-Core/apps/ART" ] && echo "ART already cloned." || git clone https://github.com/HISMalawi/BHT-Core-Apps-ART.git $WORKSPACE/BHT-Core/apps/ART'
-        echo 'Giving access to all user'
-        sh 'cd $WORKSPACE/BHT-Core/apps && chmod 777 ART'
-        echo 'Fetching new tags'
-        sh 'cd $WORKSPACE/BHT-Core/apps/ART && git fetch --tags -f'
-        echo 'Checking out to latest tag'
-        sh '#cd $WORKSPACE/BHT-Core/apps/ART && git checkout $(git describe --tags `git rev-list --tags --max-count=1`)'
-        sh '#cd $WORKSPACE/BHT-Core/apps/ART && git describe > HEAD'
+    stage('Fetching Core Apps') {
+      parallel {
+        stage('Fetching ART') {
+          steps {
+            echo 'Starting to fetch ART from GitHub'
+            echo 'Checking if BHT-Core-Apps-ART exists.'
+            sh '[ -d "$WORKSPACE/BHT-Core/apps/ART" ] && echo "ART already cloned." || git clone https://github.com/HISMalawi/BHT-Core-Apps-ART.git $WORKSPACE/BHT-Core/apps/ART'
+            echo 'Giving access to all user'
+            sh 'cd $WORKSPACE/BHT-Core/apps && chmod 777 ART'
+            echo 'Fetching new tags'
+            sh 'cd $WORKSPACE/BHT-Core/apps/ART && git fetch --tags -f'
+            echo 'Checking out to latest tag'
+            sh '#cd $WORKSPACE/BHT-Core/apps/ART && git checkout $(git describe --tags `git rev-list --tags --max-count=1`)'
+            sh '#cd $WORKSPACE/BHT-Core/apps/ART && git describe > HEAD'
+          }
+        }
+
+        stage('Fetching OPD') {
+          steps {
+            echo 'Starting to fetch ART from GitHub'
+            echo 'Checking if BHT-Core-Apps-OPD exists.'
+            sh '[ -d "$WORKSPACE/BHT-Core/apps/OPD" ] && echo "OPD already cloned." || git clone https://github.com/HISMalawi/BHT-Core-Apps-OPD.git $WORKSPACE/BHT-Core/apps/OPD'
+            echo 'Giving access to all user'
+            sh 'cd $WORKSPACE/BHT-Core/apps && chmod 777 OPD'
+            echo 'Fetching new tags'
+            sh 'cd $WORKSPACE/BHT-Core/apps/OPD && git fetch --tags -f'
+          }
+        }
+
       }
     }
 
