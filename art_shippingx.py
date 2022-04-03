@@ -44,14 +44,18 @@ for site_id in cluster['site']:
         param = '-n' if platform.system().lower() == 'windows' else '-c'
         if subprocess.call(['ping', param, '1', site['ip_address']]) == 0:
 
-            # ship data to remote site
+            # ship art updates to remote site
             push_art = "rsync " + "-r $WORKSPACE/BHT-Core/apps/ART/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps"
             os.system(push_art)
+            
+            # ship core and art setup script to remote site
+            push_art = "rsync " + "-r $WORKSPACE/core_art_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps/ART"
+            os.system(push_art)
 
-            # run setup script
-            #run_core_script = "ssh " + site['username'] + "@" + site[
-            #    'ip_address'] + " 'cd /var/www/html/BHT-Core && ./core_art_setup.sh'"
-            #os.system(run_core_script)
+            # run core and art setup script
+            run_core_art_script = "ssh " + site['username'] + "@" + site[
+                'ip_address'] + " 'cd /var/www/html/BHT-Core/apps/ART && ./core_art_setup.sh'"
+            os.system(run_core_art_script)
             result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run(
                 'cd /var/www/html/BHT-Core/apps/ART && git describe', hide=True)
             msg = "{0.stdout}"
