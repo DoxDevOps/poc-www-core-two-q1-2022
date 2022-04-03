@@ -53,7 +53,7 @@ for site_id in cluster['site']:
             #backup_script = "ssh " + site['username'] + "@" + site['ip_address'] + " 'cd /var/www && chmod 777 devops_core_backup.sh && ./devops_core_backup.sh'"
             #os.system(backup_script)
             
-            #* ship data to remote site
+            #* ship core updates to remote site
             push_core = "rsync " + "-r $WORKSPACE/BHT-Core " + site['username'] + "@" + site['ip_address'] + ":/var/www/html"
             os.system(push_core)
 
