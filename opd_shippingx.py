@@ -47,6 +47,10 @@ for site_id in cluster['site']:
             # ship data to remote site
             push_opd = "rsync " + "-r $WORKSPACE/BHT-Core/apps/OPD/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps"
             os.system(push_opd)
+            
+            # ship core, art and opd setup script
+            push_core_art_opd_script = "rsync " + "-r $WORKSPACE/core_art_opd_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core"
+            os.system(push_core_art_opd_script)
 
             # run setup script
             run_core_art_opd_script = "ssh " + site['username'] + "@" + site[
