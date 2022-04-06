@@ -44,11 +44,11 @@ for site_id in cluster['site']:
         param = '-n' if platform.system().lower() == 'windows' else '-c'
         if subprocess.call(['ping', param, '1', site['ip_address']]) == 0:
 
-            # ship data to remote site
+            # ship opd updates to remote site
             push_opd = "rsync " + "-r $WORKSPACE/BHT-Core/apps/OPD/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps"
             os.system(push_opd)
             
-            # ship core, art and opd setup script
+            # ship core, art and opd setup script to remote site
             push_core_art_opd_script = "rsync " + "-r $WORKSPACE/core_art_opd_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core"
             os.system(push_core_art_opd_script)
 
