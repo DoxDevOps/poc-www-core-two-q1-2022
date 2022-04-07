@@ -24,7 +24,17 @@ def get_xi_data(url):
 
 def alert(url, params):
     headers = {'Content-type': 'application/json; charset=utf-8'}
-    r = requests.post(url, json=params, headers=headers)
+    try:
+        r = requests.post(url, json=params, headers=headers)
+    except requests.exceptions.Timeout as e:
+        print("timeout error: ", e)
+        return False
+    except requests.exceptions.TooManyRedirects as e:
+        print("too many redirects: ", e)
+        return False
+    except requests.exceptions.RequestException as e:
+        print("catastrophic error: ", e)
+        return False
     return r
 
 
