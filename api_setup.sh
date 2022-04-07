@@ -9,12 +9,12 @@ echo "--------------------------------------------"
 git describe > HEAD
 echo "____________________________________________"
 echo "Removing Gemfile.lock"
-echo "____________________________________________"
-rm Gemfile.lock
-echo "____________________________________________"
-echo "Installing Local Gems"
-echo "____________________________________________"
-bundle install --local
+#echo "____________________________________________"
+#rm Gemfile.lock
+#echo "____________________________________________"
+#echo "Installing Local Gems"
+#echo "____________________________________________"
+#bundle install --local
 echo "--------------------------------------------"
 #echo "killing sync_worker cron job"
 #pkill -f bin/lab/sync_worker.rb
