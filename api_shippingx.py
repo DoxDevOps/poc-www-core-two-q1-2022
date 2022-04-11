@@ -23,7 +23,7 @@ def get_xi_data(url):
 * @params url, params
 * return dict
 """
-#def alert(url, params):
+def alert(url, params):
     headers = {'Content-type': 'application/json; charset=utf-8'}
     try:
         r = requests.post(url, json=params, headers=headers)
