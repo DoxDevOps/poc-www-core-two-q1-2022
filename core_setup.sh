@@ -2,7 +2,7 @@
 echo "--------------------------------------------"
 echo "Checkout to latest tag in Core"
 echo "--------------------------------------------"
-git checkout v1.1.4 -f
+git checkout v5.0.8-beta -f
 echo "--------------------------------------------"
 echo "Describing Head"
 echo "--------------------------------------------"
