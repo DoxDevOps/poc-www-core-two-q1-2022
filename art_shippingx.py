@@ -55,16 +55,16 @@ for site_id in cluster['site']:
         if subprocess.call(['ping', param, '1', site['ip_address']]) == 0:
 
             # ship art updates to remote site
-            push_art = "rsync " + "-r $WORKSPACE/BHT-Core/apps/ART/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps"
+            push_art = "rsync " + "-r $WORKSPACE/BHT-Core/apps/ART/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/BHT-Core/apps"
             os.system(push_art)
             
             # ship core and art setup script to remote site
-            push_art_script = "rsync " + "-r $WORKSPACE/art_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps/ART"
+            push_art_script = "rsync " + "-r $WORKSPACE/art_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/BHT-Core/apps/ART"
             os.system(push_art_script)
 
             # run core and art setup script
             run_art_script = "ssh " + site['username'] + "@" + site[
-                'ip_address'] + " 'cd /var/www/html/BHT-Core/apps/ART && ./art_setup.sh'"
+                'ip_address'] + " 'cd /var/www/BHT-Core/apps/ART && ./art_setup.sh'"
             os.system(run_art_script)
             result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run(
                 'cd /var/www/html/BHT-Core/apps/ART && git describe', hide=True)
