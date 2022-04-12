@@ -64,18 +64,18 @@ for site_id in cluster['site']:
             #os.system(backup_script)
             
             #* ship core updates to remote site
-            push_core = "rsync " + "-r $WORKSPACE/BHT-Core " + site['username'] + "@" + site['ip_address'] + ":/var/www/html"
+            push_core = "rsync " + "-r $WORKSPACE/BHT-Core " + site['username'] + "@" + site['ip_address'] + ":/var/www"
             os.system(push_core)
             
             #* ship core setup script to remote site
-            push_core_script = "rsync " + "-r $WORKSPACE/core_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core"
+            push_core_script = "rsync " + "-r $WORKSPACE/core_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/BHT-Core"
             os.system(push_core_script)
 
             # run setup script
-            run_core_script = "ssh " + site['username'] + "@" + site['ip_address'] + " 'cd /var/www/html/BHT-Core && ./core_setup.sh'"
+            run_core_script = "ssh " + site['username'] + "@" + site['ip_address'] + " 'cd /var/www/BHT-Core && ./core_setup.sh'"
             os.system(run_core_script)
 
-            result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run('cd /var/www/html/BHT-Core && git describe', hide=True)
+            result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run('cd /var/www/BHT-Core && git describe', hide=True)
             
             msg = "{0.stdout}"
             
