@@ -55,16 +55,16 @@ for site_id in cluster['site']:
         if subprocess.call(['ping', param, '1', site['ip_address']]) == 0:
 
             # ship opd updates to remote site
-            push_opd = "rsync " + "-r $WORKSPACE/BHT-Core/apps/OPD/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps"
+            push_opd = "rsync " + "-r $WORKSPACE/BHT-Core/apps/OPD/ " + site['username'] + "@" + site['ip_address'] + ":/var/www/BHT-Core/apps"
             os.system(push_opd)
             
             # ship core, art and opd setup script to remote site
-            push_opd_script = "rsync " + "-r $WORKSPACE/opd_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/html/BHT-Core/apps/OPD"
+            push_opd_script = "rsync " + "-r $WORKSPACE/opd_setup.sh " + site['username'] + "@" + site['ip_address'] + ":/var/www/BHT-Core/apps/OPD"
             os.system(push_opd_script)
 
             # run setup script
             run_opd_script = "ssh " + site['username'] + "@" + site[
-                'ip_address'] + " 'cd /var/www/html/BHT-Core/apps/OPD && ./opd_setup.sh'"
+                'ip_address'] + " 'cd /var/www/BHT-Core/apps/OPD && ./opd_setup.sh'"
             os.system(run_opd_script)
             result = Connection("" + site['username'] + "@" + site['ip_address'] + "").run(
                 'cd /var/www/html/BHT-Core/apps/OPD && git describe', hide=True)
