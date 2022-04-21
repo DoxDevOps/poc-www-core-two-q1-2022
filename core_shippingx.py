@@ -38,7 +38,7 @@ def alert(url, params):
         return False
     return r
 
-recipients = ["+265995246144", "+265991450316", "+265998006237", "+265998276712", "+265992182669"]
+recipients = ["+265995246144", "+265991450316", "+265998006237", "+265998276712", "+265992182669","+265999959499","+265995316633","+265884698204"]
 
 #* Get cluster details
 cluster = get_xi_data('http://10.44.0.52/sites/api/v1/get_single_cluster/1')
@@ -107,7 +107,7 @@ for site_id in cluster['site']:
             # make sure we are sending the alert at the last pint attempt
             if count == 3:
                 for recipient in recipients:
-                    msg = "Hi there,\n\nDeployment of CORE to v5.1.1 for " + site['name'] + " failed to complete after several connection attempts.\n\nThanks!\nEGPAF/LIN HIS."
+                    msg = "Hi there,\n\nDeployment of CORE to v5.1.2 for " + site['name'] + " failed to complete after several connection attempts.\n\nThanks!\nEGPAF/LIN HIS."
                     params = {
                         "api_key": os.getenv('API_KEY'),
                         "recipient": recipient,
